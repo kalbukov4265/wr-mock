@@ -1,0 +1,42 @@
+<div id="wr-form">
+  <div id="wr-group">
+    <div id="wr-group-left">
+      <select id="req-type">
+        <option value="get" selected>GET</option>
+        <option value="post">POST</option>
+        <option value="patch">PATCH</option>
+        <option value="delete">DELETE</option>
+      </select>
+      <select id="req-status">
+        <option value="200" selected>Status: 200</option>
+        <option value="301">Status: 301</option>
+        <option value="401">Status: 401</option>
+        <option value="403">Status: 403</option>
+        <option value="500">Status: 500</option>
+      </select>
+      <select id="req-delay">
+        <option value="1000" selected>1s</option>
+        <option value="2000">2s</option>
+        <option value="5000">5s</option>
+        <option value="10000">10s</option>
+        <option value="60000">1m</option>
+      </select>
+    </div>
+    <div id="wr-group-right">
+      <input type="file" hidden id="wr-import-file" name="files[]"/>
+      <button id="wr-import" class="btn import">Import</button>
+      <button id="wr-export" class="btn export">Export</button>
+    </div>
+  </div>
+  <input id="req-url" type="text" placeholder="http://some-endpoint/api" />
+  <div class="textarea-group">
+    <textarea
+      id="req-response"
+      placeholder="Response: *{status: 'ok'}*"
+    ></textarea>
+    <textarea
+      id="req-payload"
+      placeholder="Payload: *{data: 'test'}*"
+    ></textarea>
+  </div>
+</div>

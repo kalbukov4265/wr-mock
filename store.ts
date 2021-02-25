@@ -7,6 +7,7 @@ export interface Todo {
   status: string;
   delay: string;
   reqPayload: string;
+  name: string;
 }
 
 export const todos = (state: Todo[] = [], action) => {
@@ -21,6 +22,7 @@ export const todos = (state: Todo[] = [], action) => {
             status: action.status,
             delay: action.delay,
             reqPayload: action.reqPayload,
+            name: action.name
           }
         ]
       case 'CLEAR_TODO':
@@ -60,7 +62,7 @@ export const isOpen = (state: boolean = false, action) => {
   }
 }
 
-export const addTodo = (req, url, response, status, delay, reqPayload) => ({
+export const addTodo = (req, url, response, status, delay, reqPayload, name) => ({
   type: 'ADD_TODO',
   req: req,
   url: url,
@@ -68,6 +70,7 @@ export const addTodo = (req, url, response, status, delay, reqPayload) => ({
   status: status,
   delay: delay,
   reqPayload: reqPayload,
+  name: name
 });
 
 export const rootReducer = combineReducers({todos});

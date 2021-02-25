@@ -9,7 +9,7 @@ export function checkSavedRouts() {
     const data: Object = JSON.parse(localStorage.getItem('WR-ROUTS'));
     Object.keys(data).forEach(e => {
       const params = JSON.parse(data[e]);
-      store.dispatch(addTodo(params[0], params[1], params[2], params[3], params[4], params[5]));
+      store.dispatch(addTodo(params[0], params[1], params[2], params[3], params[4], params[5], params[6]));
       handlers.push(
         rest[params[0]](params[1], (req, res, ctx) => {   
           return res(
@@ -25,8 +25,8 @@ export function checkSavedRouts() {
   }
 }
 
-export function addRouteNew(req: string = 'get', url: string, response: string = '{}', status: string = '200', delay: string = '1000', reqPayload: string = '{}',) {
-  const keyUrl = _generateKey(req, url, response, status, delay, reqPayload);
+export function addRouteNew(req: string = 'get', url: string, response: string = '{}', status: string = '200', delay: string = '1000', reqPayload: string = '{}', name: string) {
+  const keyUrl = _generateKey(req, url, response, status, delay, reqPayload, name);
   if (localStorage.getItem('WR-ROUTS')) {
     const data = JSON.parse(localStorage.getItem('WR-ROUTS'));
     data[keyUrl] = JSON.stringify(arguments);
@@ -34,7 +34,7 @@ export function addRouteNew(req: string = 'get', url: string, response: string =
   } else {
     localStorage.setItem('WR-ROUTS', JSON.stringify({[keyUrl]: JSON.stringify(arguments)})); 
   }
-  store.dispatch(addTodo(req, url, response, status, delay, reqPayload));
+  store.dispatch(addTodo(req, url, response, status, delay, reqPayload, name));
   handlers.push(
     rest[req](url, (req, res, ctx) => {   
       return res(
@@ -51,7 +51,7 @@ export function addRouteNew(req: string = 'get', url: string, response: string =
 export function deleteRoute(index) {  
   if (localStorage.getItem('WR-ROUTS')) {
     const item = store.getState().todos[index];
-    const keyUrl = _generateKey(item.req, item.url, item.response, item.status, item.delay, item.reqPayload);
+    const keyUrl = _generateKey(item.req, item.url, item.response, item.status, item.delay, item.reqPayload, item.name);
     const data = JSON.parse(localStorage.getItem('WR-ROUTS'));
     delete data[keyUrl];
     localStorage.setItem('WR-ROUTS', JSON.stringify(data));
@@ -65,10 +65,10 @@ export function deleteRoute(index) {
   worker.resetHandlers(...handlers);
 }
 
-export function editRoute(index, req: string = 'get', url: string, response: string = '{}', status: string = '200', delay: string = '1000', reqPayload: string = '{}') {
-  const newKeyUrl = _generateKey(req, url, response, status, delay, reqPayload);
+export function editRoute(index, req: string = 'get', url: string, response: string = '{}', status: string = '200', delay: string = '1000', reqPayload: string = '{}', name: string) {
+  const newKeyUrl = _generateKey(req, url, response, status, delay, reqPayload, name);
   const item = store.getState().todos[index];
-  const keyUrl = _generateKey(item.req, item.url, item.response, item.status, item.delay, item.reqPayload);
+  const keyUrl = _generateKey(item.req, item.url, item.response, item.status, item.delay, item.reqPayload, item.name);
   if (keyUrl === newKeyUrl) {
     return;
   }
@@ -81,7 +81,7 @@ export function editRoute(index, req: string = 'get', url: string, response: str
     localStorage.setItem('WR-ROUTS', JSON.stringify(data)); 
   }
   // add new
-  store.dispatch(addTodo(req, url, response, status, delay, reqPayload));
+  store.dispatch(addTodo(req, url, response, status, delay, reqPayload, name));
   handlers.push(
     rest[req](url, (req, res, ctx) => {   
       return res(
@@ -102,8 +102,8 @@ export function editRoute(index, req: string = 'get', url: string, response: str
   worker.resetHandlers(...handlers);
 }
 
-function _generateKey(req: string = 'get', url: string, response: string = '{}', status: string = '200', delay: string = '1000',  reqPayload: string = '{}') {
-  return req + '[[' + url.replace(/\//gi, '-') + ']]' + '[[' + response + ']]' + status + delay + '[[' + reqPayload + ']]';
+function _generateKey(req: string = 'get', url: string, response: string = '{}', status: string = '200', delay: string = '1000',  reqPayload: string = '{}', name) {
+  return req + '[[' + url.replace(/\//gi, '-') + ']]' + '[[' + response + ']]' + status + delay + '[[' + reqPayload + ']]' + '[[' + name + ']]';
 }
 
 function _parseResponse(response: string) {

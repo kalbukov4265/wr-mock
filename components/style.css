@@ -1,7 +1,7 @@
 #wr-mock {
     display: block;
     max-width: 530px;
-    position: absolute;
+    position: fixed;
     top: 0px;
     left: 0px;
     width: 100%;
@@ -55,7 +55,7 @@
     width: 100%;
     align-items: center;
   }
-  #wr-group-right .btn {
+  #wr-group-right .wr-btn {
     margin-left: 5px;
     height: 35px;
     margin-bottom: 10px;
@@ -73,14 +73,14 @@
     justify-content: space-between;
     max-width: 280px;
   }
-  #wr-mock #wr-btn-group .btn {
+  #wr-mock #wr-btn-group .wr-btn {
     height: 35px;
   }
   #wr-mock #wr-form {
     display: flex;
     flex-direction: column;
   }
-  #wr-mock .btn {
+  #wr-mock .wr-btn {
     font-size: 12px;
     font-weight: 600;
     text-decoration: none;
@@ -100,7 +100,7 @@
     cursor: pointer;
     background-color: #dcdcdc;
   }
-  #wr-mock .btn:hover {
+  #wr-mock .wr-btn:hover {
     background-color: #d2d2d2;
   }
   #wr-mock #wr-todos {
@@ -123,7 +123,7 @@
     background: aliceblue;
     margin-bottom: 5px;
     border-radius: 3px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
     display: flex;
     justify-content: flex-start;
@@ -146,7 +146,7 @@
     min-height: 120px;
     max-width: 49%;
   }
-  #wr-mock #wr-todos li .btn {
+  #wr-mock #wr-todos li .wr-btn {
     font-size: 12px;
     font-weight: 700;
     display: block;

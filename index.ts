@@ -4,8 +4,7 @@ import { form, buttonGroupEdit, style, buttonGroupMain } from "./components/comp
 import { handlers, addRouteNew, checkSavedRouts, deleteRoute, editRoute } from "./handlers";
 export const worker = setupWorker(...handlers);
 
-let reqType, reqUrl, reqPayload , reqResponse, reqStatus, reqDelay, editableIndex;
-let showHide = false;
+let reqType, reqUrl, reqPayload , reqResponse, reqStatus, reqDelay, reqName, editableIndex;
 
 function main() {
     window['wrMock'] = {};
@@ -61,6 +60,7 @@ function createToDo() {
     reqResponse = (document.getElementById("req-response") as HTMLInputElement);
     reqStatus = (document.getElementById("req-status") as HTMLInputElement);
     reqDelay = (document.getElementById("req-delay") as HTMLInputElement);
+    reqName = (document.getElementById("req-name") as HTMLInputElement);
     document.getElementById("wr-form-open-btn").onclick = () => {
         isShowState.dispatch(!isShowState.getState().isOpen ? {type: 'ON_OPEN'} : {type: 'ON_HIDE'})  
     };
@@ -74,10 +74,10 @@ function renderList() {
     reqType.innerHTML = "";
      store.getState().todos.forEach((e, i) => {
         reqType.innerHTML += `<li title="${_resolveTitle(e)}">
-        <div class="link-data"><b>${e.req.toUpperCase()}</b> | <span>${e.url}</span> | <b>status</b>: ${e.status} </div>
+        <div class="link-data"><b>${e.req.toUpperCase()}</b> | <span>${e.name ? e.name : e.url}</span> | <b>status</b>: ${e.status} </div>
         <div class="link-action">
-            <button class="btn edit" onclick="wrMock.${onEditItem.name}(${i})">edit</button>
-            <button class="btn delete" onclick="wrMock.${deleteItem.name}(${i})">delete</button>
+            <button class="wr-btn edit" onclick="wrMock.${onEditItem.name}(${i})">edit</button>
+            <button class="wr-btn delete" onclick="wrMock.${deleteItem.name}(${i})">delete</button>
         </div>
         </li>`;
     });
@@ -88,7 +88,8 @@ function renderList() {
 
 function _resolveTitle(e) {
     const title = `
-    Method: ${e.req} 
+    Name: ${e.name}
+Method: ${e.req} 
 Url: ${e.url}
 Response Status: ${e.status}
 Response: ${e.response}
@@ -100,7 +101,7 @@ function addItem() {
     if (!reqUrl.value || !reqResponse.value) {
         alert("You must write something!");
     } else {
-        addRouteNew(reqType.value, reqUrl.value, reqResponse.value, reqStatus.value, reqDelay.value, reqPayload.value);
+        addRouteNew(reqType.value, reqUrl.value, reqResponse.value, reqStatus.value, reqDelay.value, reqPayload.value, reqName.value);
         _defaultFormValue();
     }
 }
@@ -123,7 +124,7 @@ function editItem() {
     if (!reqUrl.value || !reqResponse.value) {
         alert("You must write something!");
     } else {
-        editRoute(editableIndex, reqType.value, reqUrl.value, reqResponse.value, reqStatus.value, reqDelay.value, reqPayload.value);
+        editRoute(editableIndex, reqType.value, reqUrl.value, reqResponse.value, reqStatus.value, reqDelay.value, reqPayload.value, reqName.value);
         isEditState.dispatch({type: 'ON_CANCEL'});
         editableIndex = null;
         _defaultFormValue();
@@ -140,6 +141,7 @@ function onEditItem(index) {
     reqStatus.value = item.status;
     reqDelay.value = item.delay;
     reqPayload.value = item.reqPayload;
+    reqName.value = item.name;
 }
 
 function cancelEditItem() {
@@ -167,6 +169,7 @@ function _defaultFormValue() {
     reqStatus.value = '200';
     reqDelay.value = '1000';
     reqPayload.value = '';
+    reqName.value = '';
 }
 
 function exportSettings() {
